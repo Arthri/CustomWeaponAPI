@@ -1,51 +1,24 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- Build Configuration -->
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
-    <ProjectGuid>{5579D4D1-690A-49AD-B9B9-C6E11FD1D477}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <RootNamespace>CustomWeaponAPI</RootNamespace>
-    <AssemblyName>CustomWeaponAPI</AssemblyName>
-    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-    <TargetFrameworkProfile />
+    <TargetFramework>net6.0</TargetFramework>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
-    <PlatformTarget>x86</PlatformTarget>
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <LangVersion>7.3</LangVersion>
-    <ErrorReport>prompt</ErrorReport>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
-    <PlatformTarget>x86</PlatformTarget>
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <LangVersion>7.3</LangVersion>
-    <ErrorReport>prompt</ErrorReport>
-  </PropertyGroup>
+
+  <!-- Package Information -->
   <PropertyGroup>
-    <StartupObject />
+    <Copyright>Copyright ©  2017</Copyright>
+    <Version>1.0.0.0</Version>
   </PropertyGroup>
+
+  <!-- NuGet References -->
   <ItemGroup>
-    <Reference Include="OTAPI">
-      <HintPath>..\..\..\TShockReferences\OTAPI.dll</HintPath>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Xml" />
+    <PackageReference Include="OTAPI.Upcoming" Version="3.1.5-alpha" />
+  </ItemGroup>
+
+  <!-- Local References -->
+  <ItemGroup>
     <Reference Include="TerrariaServer">
       <HintPath>..\..\..\TShockReferences\TerrariaServer.exe</HintPath>
     </Reference>
@@ -53,14 +26,5 @@
       <HintPath>..\..\..\TShockReferences\TShockAPI.dll</HintPath>
     </Reference>
   </ItemGroup>
-  <ItemGroup>
-    <Compile Include="CustomWeapon.cs" />
-    <Compile Include="CustomWeaponDropper.cs" />
-    <Compile Include="PacketWriter.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="App.config" />
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+
 </Project>
