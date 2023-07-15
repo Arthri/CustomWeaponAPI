@@ -1,6 +1,7 @@
 ﻿using TShockAPI;
 using Terraria;
 using System;
+using Microsoft.Xna.Framework;
 
 namespace CustomWeaponAPI
 {
@@ -166,24 +167,21 @@ namespace CustomWeaponAPI
 
         public static void DropItem(TSPlayer player, CustomWeapon weapon)
         {
-            int freeIndex = 400;
-            for (int i = 0; i < 400; ++i)
-            {
-                if (!Main.item[i].active && Main.timeItemSlotCannotBeReusedFor[i] == 0)
-                {
-                    freeIndex = i;
-                    break;
-                }
-            }
+            var position = new Vector2(player.TPlayer.position.X - ((weapon.DropAreaWidth ?? 0) / 2f), player.TPlayer.position.Y - ((weapon.DropAreaHeight ?? 0) / 2f));
 
-            Main.item[freeIndex] = new Item();
-            Main.item[freeIndex].active = true;
+            var itemIndex = Item.NewItem(null, position, 0, 0, weapon.ItemNetId, weapon.Stack ?? 1, true, weapon.Prefix ?? 0, false);
+            var item = Main.item[itemIndex];
+            // Item.NewItem offsets the position by width/height
+            item.position = position;
+            // Prevent resyncing and accidental duplication
+            item.playerIndexTheItemIsReservedFor = player.Index;
+            item.keepTime = int.MaxValue;
 
             var itemDrop = new PacketWriter()
                 .SetType((int)PacketTypes.UpdateItemDrop)
-                .PackInt16((short)freeIndex)
-                .PackSingle(player.TPlayer.position.X - ((weapon.DropAreaWidth ?? 0) / 2f))
-                .PackSingle(player.TPlayer.position.Y - ((weapon.DropAreaHeight ?? 0) / 2f))
+                .PackInt16((short)itemIndex)
+                .PackSingle(position.X)
+                .PackSingle(position.Y)
                 .PackSingle(0)
                 .PackSingle(0)
                 .PackInt16(weapon.Stack ?? 1)
@@ -193,12 +191,12 @@ namespace CustomWeaponAPI
                 .GetByteData();
             var itemOwner = new PacketWriter()
                 .SetType((int)PacketTypes.ItemOwner)
-                .PackInt16((short)freeIndex)
-                .PackByte((byte) player.Index)
+                .PackInt16((short)itemIndex)
+                .PackByte((byte)player.Index)
                 .GetByteData();
 
             player.SendRawData(itemDrop);
-            player.SendRawData(GetAlterItemDropPacket(weapon, freeIndex));
+            player.SendRawData(GetAlterItemDropPacket(weapon, itemIndex));
             player.SendRawData(itemOwner);
         }
     }
